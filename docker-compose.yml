@@ -1,0 +1,41 @@
+version: '2'
+services:
+  web:
+    build: ./nginx
+    ports:
+      - "127.0.0.1:80:80"
+    volumes:
+      - ~/Projects/sites:/var/www
+    links:
+      - php
+      - mariadb:db
+  php:
+    build: ./php
+    volumes:
+      - ~/Projects/sites:/var/www
+      - ./php/site.conf:/etc/nginx/conf.d/site.conf
+    links:
+      - mariadb:db
+      - mailcatcher:smtp
+  mariadb:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - ~/Docker/mariadb/:/var/lib/mysql/
+  redis:
+    image: redis:latest
+    ports:
+      - "127.0.0.1:6379:6379"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "127.0.0.1:8085:80"
+    links:
+      - mariadb:db
+  mailcatcher:
+    build: ./mailcatcher
+    ports:
+      - "127.0.0.1:1080:1080"
