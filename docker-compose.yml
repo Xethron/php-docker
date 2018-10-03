@@ -15,6 +15,7 @@ services:
       - ~/Projects/sites:/var/www
       - ./php/site.conf:/etc/nginx/conf.d/site.conf
     links:
+      - redis:redis.test
       - mariadb:db.test
       - mailcatcher:smtp.test
   mariadb:
