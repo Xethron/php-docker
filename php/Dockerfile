@@ -21,13 +21,14 @@ RUN apt-get update && apt-get install -y \
         re2c \
         libmhash-dev \
         git \
+        zlib1g-dev libicu-dev g++ \
     && apt-get autoclean \
     && apt-get clean \
     && apt-get autoremove;
 
 RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/
 
-RUN docker-php-ext-install -j$(nproc) iconv pdo_mysql mysqli bcmath zip pcntl \
+RUN docker-php-ext-install -j$(nproc) iconv pdo_mysql mysqli bcmath zip pcntl intl \
  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
  && docker-php-ext-install -j$(nproc) gd \
  && docker-php-ext-configure gmp \
