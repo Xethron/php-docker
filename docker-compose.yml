@@ -8,15 +8,16 @@ services:
       - ~/Projects/sites:/var/www
     links:
       - php
-      - mariadb:db
+      - mariadb:db.test
   php:
     build: ./php
     volumes:
       - ~/Projects/sites:/var/www
       - ./php/site.conf:/etc/nginx/conf.d/site.conf
     links:
-      - mariadb:db
-      - mailcatcher:smtp
+      - redis:redis.test
+      - mariadb:db.test
+      - mailcatcher:smtp.test
   mariadb:
     image: mariadb:latest
     environment:
@@ -39,3 +40,4 @@ services:
     build: ./mailcatcher
     ports:
       - "127.0.0.1:1080:1080"
+      - "127.0.0.1:1025:1025"
